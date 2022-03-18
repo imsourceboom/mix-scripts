@@ -3,6 +3,8 @@
 source $HOME/rust-scripts/scripts/rust-env.sh
 source $HOME/mix-scripts/function.shinc
 
+$HOME/rust-scripts/scripts/validatorBalance.sh > $HOME/validatorBalance
+
 MIX_KEYS="$HOME/mix-keys"
 
 if [ ! -d $MIX_KEYS ]; then
