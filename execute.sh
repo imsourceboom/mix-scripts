@@ -19,7 +19,6 @@ echo "SERVER NO: $(cat $HOME/serverno)"
 DIVIDED_RANDOM=$((RANDOM% 3 + 2)) 
 echo "DIVIDED_RANDOM: $DIVIDED_RANDOM"
 
-
 # Create Divided Address
 for (( i = 1; i <= $DIVIDED_RANDOM; i++ ))
 do
