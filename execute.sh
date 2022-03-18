@@ -34,8 +34,12 @@ for (( i = 1; i <= $DIVIDED_RANDOM; i++ ))
 do
 	DIVIDED_ADDR=$(cat $MIX_KEYS/divided-$i.addr)
 	DIVIDED_PUBLIC=$(cat $MIX_KEYS/divided-$i.keys.json | jq -r '.public')
+	FRONT_RANDOM=$((RANDOM% 5 + 6))
+	MIDDLE_RANDOM=$((RANDOM% 500 + 300))
+	BACK_RANDOM=$((RANDOM% 3000 + 4567))
+	SUM_RANDOM="$FRONT_RANDOM$MIDDLE_RANDOM$BACK_RANDOM"
 
-	submitTransactionFunc $VALIDATOR_ADDR $DIVIDED_ADDR 60000000 false $MSIG_KEYS_JSON_PATH
+	submitTransactionFunc $VALIDATOR_ADDR $DIVIDED_ADDR $SUM_RANDOM false $MSIG_KEYS_JSON_PATH
 	sleep $((RANDOM% 61 + 60))
 	confirmTransactionFunc $DIVIDED_ADDR
 	sleep $((RANDOM% 61 + 60))
@@ -73,8 +77,12 @@ echo "$BRIDGE_GEN_ADDR" | grep "Raw address" | cut -d ' ' -f 3- > $MIX_KEYS/brid
 # Coin Send and Deploy Bridge Address
 BRIDGE_ADDR=$(cat $MIX_KEYS/bridge.addr)
 BRIDGE_PUBLIC=$(cat $MIX_KEYS/bridge.keys.json | jq -r '.public')
+FRONT_RANDOM=$((RANDOM% 5 + 6))
+MIDDLE_RANDOM=$((RANDOM% 500 + 300))
+BACK_RANDOM=$((RANDOM% 3000 + 4567))
+SUM_RANDOM="$FRONT_RANDOM$MIDDLE_RANDOM$BACK_RANDOM"
 
-submitTransactionFunc $(cat $MIX_KEYS/divided-$BRIDGE_RANDOM.addr) $BRIDGE_ADDR 60000000 false $MIX_KEYS/divided-$BRIDGE_RANDOM.keys.json
+submitTransactionFunc $(cat $MIX_KEYS/divided-$BRIDGE_RANDOM.addr) $BRIDGE_ADDR $SUM_RANDOM false $MIX_KEYS/divided-$BRIDGE_RANDOM.keys.json
 sleep $((RANDOM% 61 + 60))
 deployFunc $MIX_KEYS/bridge.keys.json $BRIDGE_PUBLIC 1
 sleep $((RANDOM% 3600))
@@ -107,8 +115,12 @@ for (( i = 1; i <= $DEST_RANDOM; i++))
 do
 	DEST_ADDR=$(cat $MIX_KEYS/dest-$i.addr)
 	DEST_PUBLIC=$(cat $MIX_KEYS/dest-$i.keys.json | jq -r '.public')
+	FRONT_RANDOM=$((RANDOM% 5 + 6))
+	MIDDLE_RANDOM=$((RANDOM% 500 + 300))
+	BACK_RANDOM=$((RANDOM% 3000 + 4567))
+	SUM_RANDOM="$FRONT_RANDOM$MIDDLE_RANDOM$BACK_RANDOM"
 
-	submitTransactionFunc $BRIDGE_ADDR $DEST_ADDR 60000000 false $MIX_KEYS/bridge.keys.json
+	submitTransactionFunc $BRIDGE_ADDR $DEST_ADDR $SUM_RANDOM false $MIX_KEYS/bridge.keys.json
 	sleep $((RANDOM% 61 + 60))
 	deployFunc $MIX_KEYS/dest-$i.keys.json $DEST_PUBLIC 1
 	sleep $((RANDOM% 3600))
