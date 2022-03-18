@@ -19,16 +19,6 @@ echo "SERVER NO: $(cat $HOME/serverno)"
 DIVIDED_RANDOM=$((RANDOM% 3 + 2)) 
 echo "DIVIDED_RANDOM: $DIVIDED_RANDOM"
 
-VALIDATOR_BALANCE=$($TONOS_CLI -c $TONOS_CLI_CONFIG account $VALIDATOR_ADDR | grep "balance" | awk '{print $2}')
-echo "VALIDATOR_BALANCE: $VALIDATOR_BALANCE"
-
-VALIDATOR_DIVISION_BALANCE=$(($VALIDATOR_BALANCE / $DIVIDED_RANDOM))
-echo "VALIDATOR_DIVISION_BALANCE: $VALIDATOR_DIVISION_BALANCE"
-
-if [ $VALIDATOR_BALANCE -lt 1000000000 ]; then
-	echo "!! transfer is not possible due to low amount"
-	exit
-fi
 
 # Create Divided Address
 for (( i = 1; i <= $DIVIDED_RANDOM; i++ ))
@@ -52,12 +42,18 @@ do
 	sleep $((RANDOM% 3600))
 done
 
+VALIDATOR_BALANCE=$($TONOS_CLI -c $TONOS_CLI_CONFIG account $VALIDATOR_ADDR | grep "balance" | awk '{print $2}')
+echo "VALIDATOR_BALANCE: $VALIDATOR_BALANCE"
+
+VALIDATOR_DIVISION_BALANCE=$(($(($VALIDATOR_BALANCE - 200000000)) / $DIVIDED_RANDOM))
+echo "VALIDATOR_DIVISION_BALANCE: $VALIDATOR_DIVISION_BALANCE"
+
 # Division amount to Divided Address
 for (( i = 1; i <= $DIVIDED_RANDOM; i++ ))
 do
 	DIVIDED_ADDR=$(cat $MIX_KEYS/divided-$i.addr)
 
-	submitTransactionFunc $VALIDATOR_ADDR $DIVIDED_ADDR $(($VALIDATOR_DIVISION_BALANCE - 20000000)) true $MSIG_KEYS_JSON_PATH
+	submitTransactionFunc $VALIDATOR_ADDR $DIVIDED_ADDR $(($VALIDATOR_DIVISION_BALANCE - 40000000)) true $MSIG_KEYS_JSON_PATH
 	sleep $((RANDOM% 61 + 60))
 	confirmTransactionFunc $DIVIDED_ADDR
 	sleep $((RANDOM% 3600))
@@ -88,7 +84,7 @@ do
 	DIVIDED_ADDR=$(cat $MIX_KEYS/divided-$i.addr)
 	DIVIDED_BALANCE=$($TONOS_CLI -c $TONOS_CLI_CONFIG account $DIVIDED_ADDR | grep "balance" | awk '{print $2}')
 
-	submitTransactionFunc $DIVIDED_ADDR $BRIDGE_ADDR $(($DIVIDED_BALANCE - 20000000)) true $MIX_KEYS/divided-$i.keys.json
+	submitTransactionFunc $DIVIDED_ADDR $BRIDGE_ADDR $(($DIVIDED_BALANCE - 40000000)) true $MIX_KEYS/divided-$i.keys.json
 	sleep $((RANDOM% 3600))
 done
 
@@ -119,7 +115,7 @@ done
 
 BRIDGE_BALANCE=$($TONOS_CLI -c $TONOS_CLI_CONFIG account $BRIDGE_ADDR | grep "balance" | awk '{print $2}')
 echo "BRIDGE_BALANCE: $BRIDGE_BALANCE"
-FINAL_BALANCE=$(($BRIDGE_BALANCE / $DEST_RANDOM))
+FINAL_BALANCE=$(($(($BRIDGE_BALANCE - 100000000)) / $DEST_RANDOM))
 echo "FINAL_BALANCE: $FINAL_BALANCE"
 
 # Final send to Dest Address
@@ -127,7 +123,7 @@ for (( i = 1; i <= $DEST_RANDOM; i++ ))
 do
 	DEST_ADDR=$(cat $MIX_KEYS/dest-$i.addr)
 
-	submitTransactionFunc $BRIDGE_ADDR $DEST_ADDR $(($FINAL_BALANCE - 20000000)) true $MIX_KEYS/bridge.keys.json
+	submitTransactionFunc $BRIDGE_ADDR $DEST_ADDR $(($FINAL_BALANCE - 40000000)) true $MIX_KEYS/bridge.keys.json
 	sleep $((RANDOM% 3600))
 done
 
