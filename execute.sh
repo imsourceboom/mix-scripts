@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source $HOME/rust-scripts/scripts/rust-env.sh
-source $HOME/mix/function.shinc
+source $HOME/mix-scripts/function.shinc
 
 MIX_KEYS="$HOME/mix-keys"
 
