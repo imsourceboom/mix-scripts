@@ -44,7 +44,7 @@ do
 	confirmTransactionFunc $DIVIDED_ADDR
 	sleep $((RANDOM% 61 + 60))
 	deployFunc $MIX_KEYS/divided-$i.keys.json $DIVIDED_PUBLIC 1
-	sleep $((RANDOM% 3600))
+	sleep $((RANDOM% 1800))
 done
 
 VALIDATOR_BALANCE=$($TONOS_CLI -c $TONOS_CLI_CONFIG account $VALIDATOR_ADDR | grep "balance" | awk '{print $2}')
@@ -61,7 +61,7 @@ do
 	submitTransactionFunc $VALIDATOR_ADDR $DIVIDED_ADDR $(($VALIDATOR_DIVISION_BALANCE - 40000000)) true $MSIG_KEYS_JSON_PATH
 	sleep $((RANDOM% 61 + 60))
 	confirmTransactionFunc $DIVIDED_ADDR
-	sleep $((RANDOM% 3600))
+	sleep $((RANDOM% 1800))
 done
 
 #################################################
@@ -85,7 +85,7 @@ SUM_RANDOM="$FRONT_RANDOM$MIDDLE_RANDOM$BACK_RANDOM"
 submitTransactionFunc $(cat $MIX_KEYS/divided-$BRIDGE_RANDOM.addr) $BRIDGE_ADDR $SUM_RANDOM false $MIX_KEYS/divided-$BRIDGE_RANDOM.keys.json
 sleep $((RANDOM% 61 + 60))
 deployFunc $MIX_KEYS/bridge.keys.json $BRIDGE_PUBLIC 1
-sleep $((RANDOM% 3600))
+sleep $((RANDOM% 1800))
 
 # Division amount to Bridge Address
 for (( i = 1; i <= $DIVIDED_RANDOM; i++ ))
@@ -94,7 +94,7 @@ do
 	DIVIDED_BALANCE=$($TONOS_CLI -c $TONOS_CLI_CONFIG account $DIVIDED_ADDR | grep "balance" | awk '{print $2}')
 
 	submitTransactionFunc $DIVIDED_ADDR $BRIDGE_ADDR $(($DIVIDED_BALANCE - 40000000)) true $MIX_KEYS/divided-$i.keys.json
-	sleep $((RANDOM% 3600))
+	sleep $((RANDOM% 1800))
 done
 
 #################################################
@@ -123,7 +123,7 @@ do
 	submitTransactionFunc $BRIDGE_ADDR $DEST_ADDR $SUM_RANDOM false $MIX_KEYS/bridge.keys.json
 	sleep $((RANDOM% 61 + 60))
 	deployFunc $MIX_KEYS/dest-$i.keys.json $DEST_PUBLIC 1
-	sleep $((RANDOM% 3600))
+	sleep $((RANDOM% 1800))
 done
 
 BRIDGE_BALANCE=$($TONOS_CLI -c $TONOS_CLI_CONFIG account $BRIDGE_ADDR | grep "balance" | awk '{print $2}')
@@ -137,7 +137,7 @@ do
 	DEST_ADDR=$(cat $MIX_KEYS/dest-$i.addr)
 
 	submitTransactionFunc $BRIDGE_ADDR $DEST_ADDR $(($FINAL_BALANCE - 40000000)) true $MIX_KEYS/bridge.keys.json
-	sleep $((RANDOM% 3600))
+	sleep $((RANDOM% 1800))
 done
 
 
