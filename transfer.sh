@@ -13,7 +13,9 @@ do
 	echo "DEST $i"
 	DEST_ADDR=$(cat $MIX_KEYS/dest-$i.addr)
 	DEST_BALANCE=$($TONOS_CLI -c $TONOS_CLI_CONFIG account $DEST_ADDR | grep 'balance' | awk '{print $2}')
-	submitTransactionFunc $DEST_ADDR $GATHER_ADDR $DEST_BALANCE true $MIX_KEYS/dest-$i.keys.json
+
+	submitTransactionFunc $DEST_ADDR $GATHER_ADDR $(($DEST_BALANCE - 40000000)) true $MIX_KEYS/dest-$i.keys.json
+
 	if [ $i -lt 2 ]; then
 		sleep $((RANDOM% 7200))
 	fi
