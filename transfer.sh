@@ -16,7 +16,7 @@ do
 
 	submitTransactionFunc $DEST_ADDR $GATHER_ADDR $(($DEST_BALANCE - 40000000)) true $MIX_KEYS/dest-$i.keys.json
 
-	if [ $i -lt 2 ]; then
+	if [ $DEST_COUNT -ge 2 ] && [ $i -le 1 ]; then
 		sleep $((RANDOM% 7200))
 	fi
 done
