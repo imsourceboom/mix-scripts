@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sleep $((RANDOM% 86000))
+
 source $HOME/rust-scripts/scripts/rust-env.sh
 source $HOME/mix-scripts/function.shinc
 
