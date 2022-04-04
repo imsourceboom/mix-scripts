@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sleep $((RANDOM% 86000))
+
 source $HOME/rust-scripts/scripts/rust-env.sh
 source $HOME/mix-scripts/function.shinc
 
@@ -17,6 +19,6 @@ do
 	submitTransactionFunc $DEST_ADDR $GATHER_ADDR $(($DEST_BALANCE - 40000000)) true $MIX_KEYS/dest-$i.keys.json
 
 	if [ $DEST_COUNT -ge 2 ] && [ $i -le 1 ]; then
-		sleep $((RANDOM% 7200))
+		sleep $((RANDOM% 45000))
 	fi
 done
